@@ -1,0 +1,26 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Environment / Secret files
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# SQLite Database local runtime binary (schemas & seed files setup_db.py are tracked)
+*.sqlite3
+*.db
+!db/nexlink.db
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
