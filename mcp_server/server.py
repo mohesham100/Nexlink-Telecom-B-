@@ -6,6 +6,10 @@ from typing import Dict, Any
 from mcp.server.fastmcp import FastMCP, Context
 from mcp.types import PromptMessage, TextContent
 
+import sys
+sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
+from mcp_server.rag.rag_tool import search_knowledge_base_handler
+
 mcp = FastMCP("NexlinkTelecomNOC")
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db', 'nexlink.db')
 POLICIES_DIR = os.path.join(os.path.dirname(__file__), 'policies')
@@ -175,6 +179,14 @@ async def analyze_incident_root_cause(node_id: int, ctx: Context) -> str:
             pass
 
     return f"Root Cause Analysis for Node #{node_id}: {analysis}"
+
+@mcp.tool()
+def search_knowledge_base(query: str, entity_id: str = None, top_k: int = 3) -> str:
+    """Search unstructured NOC incident post-mortems, runbooks, and maintenance notes."""
+    args = {"query": query, "top_k": top_k}
+    if entity_id:
+        args["entity_id"] = entity_id
+    return search_knowledge_base_handler(args, session_role=active_session["role"])
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
