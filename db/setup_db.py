@@ -6,6 +6,8 @@ db_path = os.path.join(os.path.dirname(__file__), 'nexlink.db')
 def init_db():
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
+    cur.execute("PRAGMA foreign_keys = ON;")
+    cur.execute("PRAGMA journal_mode = WAL;")
 
     cur.executescript("""
     DROP TABLE IF EXISTS audit_logs;
