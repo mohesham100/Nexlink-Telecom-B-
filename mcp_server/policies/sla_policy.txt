@@ -1,0 +1,13 @@
+# Nexlink Telecom Enterprise SLA & Bandwidth Policy
+
+1. Bandwidth Allocations:
+   - VIP SLA Tier: Maximum single upgrade threshold is 5.0 Gbps per request. Upgrades above 5.0 Gbps require explicit NOC Admin sign-off via human-in-the-loop elicitation.
+   - Enterprise SLA Tier: Upgrades up to 2.0 Gbps are auto-approved. Upgrades above 2.0 Gbps require supervisor authorization.
+   - Standard SLA Tier: Fixed quota. Upgrades require commercial contract modification.
+
+2. Incident Resolution Priority:
+   - Outage on VIP Node: Response window < 15 minutes.
+   - Congested Node (>90% capacity load): Automatic rerouting diagnostic recommended.
+
+3. Maintenance Windows:
+   - Planned maintenance must be scheduled during 01:00 - 04:00 UTC.
