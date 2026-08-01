@@ -1,0 +1,12 @@
+# Nexlink Network Operations Standard Operating Procedure (SOP)
+
+1. Diagnostic Protocol:
+   - When a node status is reported as 'Down' or 'Congested', execute 'run_network_diagnostic' first to check optical fiber integrity and packet loss.
+   - Do NOT attempt to increase bandwidth on a node that is currently in 'Down' or 'Maintenance' state.
+
+2. Root Cause Sampling Protocol:
+   - For complex log anomalies on Fiber or 5G Core nodes, utilize the 'analyze_incident_root_cause' tool. The MCP server will request LLM sampling reasoning to inspect packet trace metrics before taking corrective action.
+
+3. Authorization & Escalation:
+   - Read-only tools ('get_customer_network_status', 'get_node_status') are accessible to all operators.
+   - State-changing write tools ('upgrade_bandwidth', 'set_node_maintenance') require active NOC_Admin token authentication.
