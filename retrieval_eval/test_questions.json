@@ -1,0 +1,28 @@
+[
+  {"id": "gen-1", "category": "general", "query": "What is the failover requirement for Banking VIP customers during an outage?",
+   "golden_keywords": ["120 seconds", "banking"]},
+  {"id": "gen-2", "category": "general", "query": "What should engineers do first when a node is reported Down or Congested?",
+   "golden_keywords": ["run_network_diagnostic", "optical fiber integrity"]},
+  {"id": "gen-3", "category": "general", "query": "What happens automatically when a node exceeds 90% capacity load?",
+   "golden_keywords": ["rerouting diagnostic"]},
+  {"id": "gen-4", "category": "general", "query": "What time window is planned maintenance restricted to?",
+   "golden_keywords": ["01:00", "04:00"]},
+
+  {"id": "cite-1", "category": "citation", "query": "What does Clause 4.2b say about Standard-tier reimbursement?",
+   "golden_keywords": ["4.2b", "discretionary"]},
+  {"id": "cite-2", "category": "citation", "query": "What does SOP 5.3c require for cooling-related maintenance?",
+   "golden_keywords": ["5.3c", "thermal stress test"]},
+  {"id": "cite-3", "category": "citation", "query": "What is Notice VN-2026-014 about?",
+   "golden_keywords": ["vn-2026-014", "qx-771"]},
+  {"id": "cite-4", "category": "citation", "query": "What does SOP 4.1 say about equipment under an active vendor recall?",
+   "golden_keywords": ["4.1", "maintenance window"]},
+
+  {"id": "multi-1", "category": "multi_part", "query": "For Node #12 going into maintenance, what firmware risk exists and what SLA notification is required?",
+   "golden_keywords": ["qx-771", "compliance notice"]},
+  {"id": "multi-2", "category": "multi_part", "query": "If a Banking VIP customer has an outage, what's the failover requirement and who needs to be notified per the escalation matrix?",
+   "golden_keywords": ["120 seconds", "on-call noc_admin"]},
+  {"id": "multi-3", "category": "multi_part", "query": "Node #10 has recurring optical attenuation issues -- what does the SOP say to do, and did the incident postmortem show that procedure was followed?",
+   "golden_keywords": ["dispatch", "delayed"]},
+  {"id": "multi-4", "category": "multi_part", "query": "What's the financial exposure and escalation timeline if a Standard-tier customer's node goes Down for 5 hours?",
+   "golden_keywords": ["15%", "fully down"]}
+]
