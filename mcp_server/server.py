@@ -3,16 +3,21 @@ import os
 import sqlite3
 import argparse
 from typing import Dict, Any
-from mcp.server.fastmcp import FastMCP, Context
+from dataclasses import dataclass
+from fastmcp import FastMCP, Context
 from mcp.types import PromptMessage, TextContent
+from langchain_ollama import ChatOllama
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from mcp_server.rag.rag_tool import search_knowledge_base_handler
+from mcp_server.rag.rag_tool import search_knowledge_base_handler, knowledge_store
 
 mcp = FastMCP("NexlinkTelecomNOC")
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db', 'nexlink.db')
 POLICIES_DIR = os.path.join(os.path.dirname(__file__), 'policies')
+
+# Real LLM (TODO #1 from decompose_search.py: replace FakeLLM with real LLM client)
+decompose_llm = ChatOllama(model="qwen-accurate:9b", temperature=0)
 
 active_session: Dict[str, Any] = {
     "authenticated": False,
@@ -179,6 +184,74 @@ async def analyze_incident_root_cause(node_id: int, ctx: Context) -> str:
             pass
 
     return f"Root Cause Analysis for Node #{node_id}: {analysis}"
+
+DECOMPOSE_PROMPT = """\
+Break the following question into 2-4 simpler sub-questions that, together,
+fully answer it. If the question is already simple, just return it as-is
+as a single sub-question.
+
+Question: {query}
+
+Return ONLY a numbered list, one sub-question per line. Example:
+1. ...
+2. ...
+"""
+
+
+def decompose_query(query: str) -> list[str]:
+    """Turn one (possibly compound) query into a list of sub-questions."""
+    raw = str(decompose_llm.invoke(DECOMPOSE_PROMPT.format(query=query)).content)
+
+    sub_questions = []
+    for line in raw.strip().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        # strip a leading "1.", "2)", "- " etc.
+        for sep in [". ", ") ", "- "]:
+            if sep in line[:4]:
+                line = line.split(sep, 1)[1]
+                break
+        sub_questions.append(line.strip())
+
+    return sub_questions or [query]  # fallback: treat as one question
+
+
+# Tagged result so the model knows which sub-question each chunk answers
+
+
+@dataclass
+class TaggedChunk:
+    sub_question: str
+    chunk: str
+    score: float
+
+
+@mcp.tool()
+def decompose_and_search(query: str, top_k: int = 3) -> str:
+    """
+    Break a compound question into sub-questions, search the knowledge base
+    once per sub-question, and return combined tagged results.
+    Sits in front of search_knowledge_base — does not replace it.
+    """
+    sub_questions = decompose_query(query)
+
+    results: list[TaggedChunk] = []
+    for sub_q in sub_questions:
+        # TODO #2 from decompose_search.py: use real search tool
+        hits = knowledge_store.query(query_text=sub_q, top_k=top_k)
+        for doc in hits:
+            if doc["metadata"]["role_required"] in ("any", active_session["role"]):
+                results.append(TaggedChunk(sub_question=sub_q, chunk=doc["payload"], score=1.0))
+
+    if not results:
+        return "No relevant records found for any sub-question."
+
+    output_lines = []
+    for r in results:
+        output_lines.append(f"[Sub-Q: {r.sub_question}] -> {r.chunk} (score={r.score})")
+    return "\n".join(output_lines)
+
 
 @mcp.tool()
 def search_knowledge_base(query: str, entity_id: str = None, top_k: int = 3) -> str:
