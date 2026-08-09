@@ -1,28 +1,98 @@
 [
-  {"id": "gen-1", "category": "general", "query": "What is the failover requirement for Banking VIP customers during an outage?",
-   "golden_keywords": ["120 seconds", "banking"]},
-  {"id": "gen-2", "category": "general", "query": "What should engineers do first when a node is reported Down or Congested?",
-   "golden_keywords": ["run_network_diagnostic", "optical fiber integrity"]},
-  {"id": "gen-3", "category": "general", "query": "What happens automatically when a node exceeds 90% capacity load?",
-   "golden_keywords": ["rerouting diagnostic"]},
-  {"id": "gen-4", "category": "general", "query": "What time window is planned maintenance restricted to?",
-   "golden_keywords": ["01:00", "04:00"]},
-
-  {"id": "cite-1", "category": "citation", "query": "What does Clause 4.2b say about Standard-tier reimbursement?",
-   "golden_keywords": ["4.2b", "discretionary"]},
-  {"id": "cite-2", "category": "citation", "query": "What does SOP 5.3c require for cooling-related maintenance?",
-   "golden_keywords": ["5.3c", "thermal stress test"]},
-  {"id": "cite-3", "category": "citation", "query": "What is Notice VN-2026-014 about?",
-   "golden_keywords": ["vn-2026-014", "qx-771"]},
-  {"id": "cite-4", "category": "citation", "query": "What does SOP 4.1 say about equipment under an active vendor recall?",
-   "golden_keywords": ["4.1", "maintenance window"]},
-
-  {"id": "multi-1", "category": "multi_part", "query": "For Node #12 going into maintenance, what firmware risk exists and what SLA notification is required?",
-   "golden_keywords": ["qx-771", "compliance notice"]},
-  {"id": "multi-2", "category": "multi_part", "query": "If a Banking VIP customer has an outage, what's the failover requirement and who needs to be notified per the escalation matrix?",
-   "golden_keywords": ["120 seconds", "on-call noc_admin"]},
-  {"id": "multi-3", "category": "multi_part", "query": "Node #10 has recurring optical attenuation issues -- what does the SOP say to do, and did the incident postmortem show that procedure was followed?",
-   "golden_keywords": ["dispatch", "delayed"]},
-  {"id": "multi-4", "category": "multi_part", "query": "What's the financial exposure and escalation timeline if a Standard-tier customer's node goes Down for 5 hours?",
-   "golden_keywords": ["15%", "fully down"]}
+  {
+    "id": "q1",
+    "question": "What is the standard maintenance window for Nexlink nodes?",
+    "category": "general",
+    "expected_answer": "01:00-04:00 UTC",
+    "expected_keywords": ["01:00-04:00", "UTC", "PROC-MAINT-WINDOW"],
+    "favors": "naive"
+  },
+  {
+    "id": "q2",
+    "question": "What are the SLA response requirements for VIP customers?",
+    "category": "general",
+    "expected_answer": "<15 min response",
+    "expected_keywords": ["15", "min", "response", "PROC-SLA-VIP_escalation"],
+    "favors": "naive"
+  },
+  {
+    "id": "q3",
+    "question": "What incident response severity levels does Nexlink use?",
+    "category": "general",
+    "expected_answer": "P1-P4",
+    "expected_keywords": ["P1", "P2", "P3", "P4", "PROC-INCIDENT-RESPONSE"],
+    "favors": "naive"
+  },
+  {
+    "id": "q4",
+    "question": "What type of fiber does Nexlink use in their network?",
+    "category": "general",
+    "expected_answer": "Corning SMF-28e",
+    "expected_keywords": ["Corning", "SMF-28e", "VB-2026-003"],
+    "favors": "naive"
+  },
+  {
+    "id": "q5",
+    "question": "What did post-mortem PM-2026-001 conclude about the Cairo Metro fiber cut?",
+    "category": "exact_identifier",
+    "expected_answer": "excavation severed fiber trunk, emergency splice",
+    "expected_keywords": ["excavation", "severed", "emergency splice", "PM-2026-001"],
+    "favors": "hybrid"
+  },
+  {
+    "id": "q6",
+    "question": "What firmware version caused the kernel panic on the Suez 5G Core according to PM-2026-003?",
+    "category": "exact_identifier",
+    "expected_answer": "v3.2.1",
+    "expected_keywords": ["v3.2.1", "PM-2026-003"],
+    "favors": "hybrid"
+  },
+  {
+    "id": "q7",
+    "question": "What CVE is addressed by vendor bulletin VB-2026-005?",
+    "category": "exact_identifier",
+    "expected_answer": "CVE-2026-1847",
+    "expected_keywords": ["CVE-2026-1847", "VB-2026-005"],
+    "favors": "hybrid"
+  },
+  {
+    "id": "q8",
+    "question": "What was the splice loss measurement recorded in maintenance visit MV-2026-014?",
+    "category": "exact_identifier",
+    "expected_answer": "0.15 dB",
+    "expected_keywords": ["0.15", "dB", "MV-2026-014"],
+    "favors": "hybrid"
+  },
+  {
+    "id": "q9",
+    "question": "For Bank of Alexandria, a VIP customer on Node 10 which is congested, what past maintenance fixes were applied to their node and what SLA escalation procedure applies if they experience an outage?",
+    "category": "multi_hop",
+    "expected_answer": "Needs to combine MV docs for Node 10 + PROC-SLA-VIP",
+    "expected_keywords": ["Node 10", "Bank of Alexandria", "VIP", "escalation", "SLA", "PROC-SLA-VIP"],
+    "favors": "agentic"
+  },
+  {
+    "id": "q10",
+    "question": "Node 10 has had recurring issues. Give me a complete timeline of all incidents and maintenance visits for Node 10, and what the current recommended actions are.",
+    "category": "multi_hop",
+    "expected_answer": "Needs PM-2026-001, MV-2026-010, MV-2026-014, MV-2026-030",
+    "expected_keywords": ["Node 10", "PM-2026-001", "MV-2026-010", "MV-2026-014", "MV-2026-030"],
+    "favors": "agentic"
+  },
+  {
+    "id": "q11",
+    "question": "If Suez-5G-Core experiences another firmware crash, what was the previous root cause, what firmware version should we roll back to, and has a patch been released?",
+    "category": "multi_hop",
+    "expected_answer": "Needs PM-2026-003, MV-2026-022, VB-2026-005",
+    "expected_keywords": ["Suez-5G-Core", "PM-2026-003", "MV-2026-022", "VB-2026-005", "v3.2.1", "CVE-2026-1847"],
+    "favors": "agentic"
+  },
+  {
+    "id": "q12",
+    "question": "Compare the capacity expansion plans for Alexandria Datacenter A and Cairo East Hub — what is each plan's scope, timeline, and estimated investment?",
+    "category": "multi_hop",
+    "expected_answer": "Needs CP-2026-Q2 + CP-2026-Q3",
+    "expected_keywords": ["Alexandria", "Cairo", "scope", "timeline", "investment", "CP-2026-Q2", "CP-2026-Q3"],
+    "favors": "agentic"
+  }
 ]
