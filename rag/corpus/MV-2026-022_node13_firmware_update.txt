@@ -1,0 +1,25 @@
+MAINTENANCE VISIT: MV-2026-022
+Date: 2026-06-25
+Location: Node 13 (Suez-5G-Core)
+Engineer: Remote NOC Operations (Khaled)
+
+Objective:
+Perform a planned firmware update on the core router at Node 13 from v3.1.8 to v3.3.0 to patch the kernel panic bug identified in PM-2026-003.
+
+Work Performed:
+1. Maintenance window initiated at 01:00 UTC.
+2. Verified current configuration and performed a final backup to the TFTP server.
+3. Uploaded the new firmware image (v3.3.0) to the router's flash memory.
+4. Verified the MD5 checksum of the uploaded image to ensure integrity.
+5. Configured the boot variable to load the new image on the next reload.
+6. Initiated a graceful reload of the router at 01:20 UTC.
+7. Monitored the boot process via out-of-band console access.
+8. The router successfully booted into v3.3.0 at 01:28 UTC.
+9. Verified OSPF adjacencies and BGP peering sessions came up.
+10. Conducted post-check validation: routing tables, interface status, and CPU/memory utilization all nominal.
+
+Results:
+Firmware successfully updated to v3.3.0. The bug causing the memory leak in the BGP process is officially patched in this release according to the vendor release notes. 
+
+Notes:
+The node is operating stably. We will monitor memory utilization closely over the next 72 hours to ensure the leak is definitively resolved.

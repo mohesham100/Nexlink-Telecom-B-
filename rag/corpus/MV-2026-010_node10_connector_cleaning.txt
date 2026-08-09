@@ -1,0 +1,23 @@
+MAINTENANCE VISIT: MV-2026-010
+Date: 2026-07-15
+Location: Node 10 (Alex-Fiber-Main)
+Engineer: Ahmed Hassan
+
+Objective:
+Investigate and resolve high optical attenuation alarms on the main uplink port connected to patch panel 4B.
+
+Work Performed:
+1. Arrived at Node 10 site at 10:00 UTC.
+2. Verified alarms on the NMS showing Rx power levels at -28.4 dBm on interface Te0/1/0.
+3. Inspected patch panel 4B. Noticed significant dust accumulation in the rack.
+4. Safely disconnected the LC-LC patch cord on both the transceiver side and the patch panel side.
+5. Used a fiber optic inspection microscope to examine the ferrule end-faces. Both the patch cord connectors and the bulkhead adapters showed heavy contamination (dirt and oil).
+6. Cleaned all connectors and adapters using a specialized click-to-clean tool and lint-free wipes with 99% isopropyl alcohol.
+7. Re-inspected with the microscope to verify end-faces were pristine.
+8. Reconnected the patch cord.
+
+Results:
+Following the cleaning procedure, the optical attenuation improved drastically. The Rx power level on interface Te0/1/0 increased from -28.4 dBm to a healthy -8.2 dBm. The link error rate dropped to zero.
+
+Notes:
+The facility environment is unusually dusty. I recommend checking the HVAC filters for the server room and potentially increasing the frequency of preventative maintenance visits for optical cleaning at this site.

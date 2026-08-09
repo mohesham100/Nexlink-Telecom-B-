@@ -1,0 +1,17 @@
+VENDOR BULLETIN: VB-2026-003
+Source: Corning Optical Communications
+Date: 2026-02-15
+Subject: SMF-28e Fiber Splice Loss Advisory in High-Humidity Environments
+
+Details:
+Corning has identified an issue affecting the splicing performance of SMF-28e single-mode fiber when operations are conducted in environments with consistently high relative humidity (RH > 85%), such as coastal regions in Egypt.
+
+Moisture absorption on the exposed glass cladding prior to fusion can lead to microscopic bubbles forming within the splice joint, resulting in higher than expected attenuation (frequently exceeding 0.25 dB per splice).
+
+Recommendations for Coastal Egypt Operations:
+1. Splicing should ideally be conducted in climate-controlled splicing vans.
+2. If field splicing in high humidity is unavoidable, the time between stripping the buffer coating, cleaning the fiber, and executing the fusion splice must be minimized to less than 60 seconds.
+3. Arc calibration on fusion splicers (e.g., Fujikura, Sumitomo) should be performed daily in the actual environment where the work is taking place.
+4. Increase the pre-fuse arc duration slightly to evaporate superficial moisture before the main fusion arc fires. (Consult your splicer manual for specific parameter adjustments).
+
+Failure to adopt these practices may result in failing optical link budgets on long-haul coastal runs.

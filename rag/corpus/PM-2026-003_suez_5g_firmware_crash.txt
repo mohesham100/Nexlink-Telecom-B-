@@ -1,0 +1,26 @@
+POST-MORTEM REPORT: PM-2026-003
+Date: 2026-06-20
+Incident: Suez-5G-Core Firmware Crash
+Affected Node: Node 13 (Suez-5G-Core)
+
+Timeline (UTC):
+18:45 - Network monitoring detected a sudden drop in throughput across all 5G sectors originating from Node 13.
+18:47 - Multiple OSPF neighbor adjacencies dropped.
+18:50 - NOC attempted SSH access to the core router but connection refused.
+19:05 - Out-of-band management access confirmed the router was in a continuous reboot loop due to a kernel panic.
+19:20 - NOC engineer initiated a rollback to the previous firmware version (v3.1.8) via ROMMON.
+19:45 - Router successfully booted with v3.1.8.
+20:10 - All BGP and OSPF sessions re-established. 5G subscriber traffic normalized.
+
+Root Cause:
+The core router at Node 13 had been upgraded to firmware v3.2.1 during a maintenance window three days prior. Under peak load conditions, a memory leak in the BGP routing daemon of v3.2.1 caused memory exhaustion, leading to a kernel panic and a continuous reboot loop.
+
+Resolution:
+The device was rolled back to the stable v3.1.8 firmware image. The vendor was contacted and provided with crash dump logs for analysis.
+
+Impact:
+5G connectivity for subscribers in the Suez region was degraded or completely unavailable for approximately 85 minutes.
+
+Lessons Learned:
+1. Firmware upgrades should be subject to a longer "soak period" in the lab environment, specifically simulating peak load conditions.
+2. Implementing automated rollback scripts triggered by consecutive unplanned reboots could reduce downtime.

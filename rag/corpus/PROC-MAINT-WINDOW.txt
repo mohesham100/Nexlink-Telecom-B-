@@ -1,0 +1,12 @@
+STANDARD OPERATING PROCEDURE: PROC-MAINT-WINDOW
+Subject: Planned Maintenance Scheduling
+
+Purpose:
+To establish strict guidelines for executing network changes to minimize customer impact.
+
+Procedure:
+1. Approved Window: All intrusive planned maintenance must be scheduled during the designated maintenance window: 01:00 to 04:00 UTC. No exceptions are allowed without VP of Engineering approval.
+2. Notification: A minimum of 72 hours advance notice must be provided to all affected customers. For VIP customers, account managers must confirm receipt of the notification.
+3. MOP Requirement: A detailed Method of Procedure (MOP) document must be submitted and approved by the Change Advisory Board (CAB) prior to execution.
+4. Rollback Plan: Every MOP MUST include a clear, tested rollback plan. If the maintenance is not successful by 03:30 UTC, the rollback plan must be immediately initiated to ensure service is restored by 04:00 UTC.
+5. Freezes: Maintenance freezes are enacted during major national holidays and critical events. No planned work is permitted during these times.

@@ -1,0 +1,17 @@
+CAPACITY PLANNING: CP-2026-Q2
+Subject: Alexandria Datacenter A Expansion Plan
+Target Completion: September 2026
+
+Overview:
+Driven by the projected growth of enterprise cloud services and the upcoming migration away from EOL equipment (see VB-2026-007), Alexandria Datacenter A requires a significant capacity expansion.
+
+Current State:
+The current backbone uplinks are running at 75% utilization during peak hours. Rack space in the primary communications hall is at 90% capacity.
+
+Expansion Requirements:
+1. Backbone Capacity: Add an additional 40 Gbps of backbone transit capacity. This will require new DWDM transponders and lighting up a dark fiber pair to the Cairo core.
+2. Rack Space: Lease and build out 10 additional racks in the adjacent suite. Install necessary PDU and top-of-rack switching infrastructure.
+3. Hardware Refresh: Begin deploying next-generation routing hardware to replace the outgoing ASR 9000 edge routers.
+
+Budget & Timeline:
+The estimated capital expenditure (CAPEX) for this project is 4.5M EGP. Procurement of hardware must begin immediately to account for global supply chain delays. The target completion date for the physical build-out and link turn-up is September 2026.

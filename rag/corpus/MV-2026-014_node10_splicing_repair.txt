@@ -1,0 +1,24 @@
+MAINTENANCE VISIT: MV-2026-014
+Date: 2026-05-14
+Location: Cairo Metro Line 3 Construction Site (near Node 10)
+Engineer: Tarek Mahmoud
+
+Objective:
+Perform emergency fiber splicing to repair the severed 144-strand trunk cable caused by excavation equipment.
+
+Work Performed:
+1. Dispatched on an emergency basis, arriving on-site at 09:00 UTC.
+2. Coordinated with construction crew to secure the area and halt digging.
+3. Located the severed ends of the armored fiber cable in the trench.
+4. Pulled sufficient slack from the adjacent handholes to allow for a splice closure.
+5. Prepped both ends of the cable: stripped the armor, buffer tubes, and cleaned the fibers.
+6. Utilized a Fujikura core-alignment fusion splicer to splice all 144 strands.
+7. Installed splice protectors and organized the fibers within a waterproof splice enclosure (FOSC).
+8. Sealed the enclosure and secured it in the handhole.
+9. Coordinated with the NOC to perform OTDR testing from Node 10 to verify the integrity of the splices.
+
+Results:
+The splicing was completed successfully. OTDR measurements indicated an average splice loss of 0.15 dB per strand, which is well within the acceptable specification of <0.3 dB. The overall link budget was restored to nominal levels, and the NOC confirmed all services were back online.
+
+Notes:
+This is a temporary emergency repair. A permanent maintenance window must be scheduled to replace the damaged section of the cable entirely and potentially reroute it away from the active construction zone to prevent recurrence.

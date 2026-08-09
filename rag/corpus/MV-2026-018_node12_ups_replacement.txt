@@ -1,0 +1,24 @@
+MAINTENANCE VISIT: MV-2026-018
+Date: 2026-06-05
+Location: Node 12 (Alex-Fiber-North)
+Engineer: Youssef Ibrahim
+
+Objective:
+Replace the failed UPS battery bank and faulty ATS controller that caused the total outage on June 2nd.
+
+Work Performed:
+1. Arrived on-site at 08:00 UTC with the replacement equipment.
+2. Coordinated with the NOC to ensure all traffic was safely diverted away from Node 12 where possible, to minimize risk during the power transition.
+3. Placed the existing, degraded UPS system into maintenance bypass mode, feeding commercial power directly to the equipment racks.
+4. Disconnected and safely removed the old, failed battery bank.
+5. Installed the new UPS battery bank: APC Smart-UPS RT 10kVA.
+6. Replaced the faulty logic board on the Automatic Transfer Switch (ATS) for the backup generator.
+7. Conducted a localized test of the ATS by simulating a commercial power loss. The generator successfully auto-started, synchronized, and assumed the load within 12 seconds.
+8. Re-engaged the new UPS and transitioned the equipment load from bypass back to protected UPS power.
+9. Verified UPS telemetry and battery health status via the environmental monitoring system.
+
+Results:
+The node is now fully protected by a healthy UPS and a functional generator ATS. 
+
+Notes:
+The old batteries have been transported back to the warehouse for proper environmental disposal. The new APC unit provides an estimated runtime of 120 minutes at current load, which is sufficient time for the generator to start or for manual intervention.

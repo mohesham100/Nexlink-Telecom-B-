@@ -1,0 +1,27 @@
+POST-MORTEM REPORT: PM-2026-004
+Date: 2026-07-11
+Incident: DDoS Attack on Cairo-Fiber-East
+Affected Node: Node 11 (Cairo-Fiber-East)
+
+Timeline (UTC):
+21:30 - Sudden spike in inbound traffic detected on Node 11's external transit links.
+21:32 - Link utilization reached 100% (40 Gbps). Legitimate traffic began dropping due to interface congestion.
+21:35 - NetFlow analysis identified a massive UDP flood targeting a specific customer IP block hosted behind Node 11.
+21:40 - NOC applied BGP Flowspec rules to rate-limit UDP traffic destined for the targeted block.
+21:55 - The attack morphed into a TCP SYN flood.
+22:05 - Upstream blackholing (RTBH) was initiated for the specific targeted /32 IP addresses to save the broader network.
+22:30 - Attack volume subsided.
+23:15 - RTBH routing was removed, and traffic fully normalized.
+
+Root Cause:
+A distributed denial-of-service (DDoS) attack utilizing spoofed IP addresses targeted a gaming server hosted by an enterprise customer connected to Node 11. The attack saturated the transit links, causing collateral damage to other customers on the same node.
+
+Resolution:
+The attack was mitigated using a combination of rate limiting via BGP Flowspec and ultimately Remotely Triggered Black Hole (RTBH) routing to drop traffic to the specific targeted IPs at the network edge.
+
+Impact:
+General internet access for customers on Node 11 was severely degraded for about 35 minutes. The specific targeted customer was offline for approximately 100 minutes due to the blackholing.
+
+Lessons Learned:
+1. We need to implement an automated DDoS mitigation appliance (e.g., Arbor Networks) at the network edge to detect and scrub malicious traffic automatically before it saturates internal links.
+2. Customer communication during security events needs to be more streamlined.

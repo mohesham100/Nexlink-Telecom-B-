@@ -1,0 +1,27 @@
+POST-MORTEM REPORT: PM-2026-002
+Date: 2026-06-02
+Incident: Alex-Fiber-North Power Failure
+Affected Node: Node 12 (Alex-Fiber-North)
+
+Timeline (UTC):
+14:00 - Commercial power grid failure in the Alexandria North district.
+14:00 - UPS system at Node 12 took over the load.
+14:05 - UPS battery bank failed prematurely due to undetected degraded cells.
+14:05 - Backup diesel generator failed to auto-start due to a faulty Automatic Transfer Switch (ATS) controller.
+14:06 - Complete loss of power at Node 12. All equipment offline.
+15:30 - Facilities engineer arrived on-site.
+16:15 - Generator started manually. Power restored to site. Equipment boot sequence initiated.
+20:00 - Commercial power restored. UPS running in bypass mode. Services fully stable.
+
+Root Cause:
+A cascading failure event. First, the commercial grid failed. The UPS system, which was scheduled for maintenance, failed under load in 5 minutes instead of the rated 4 hours. Compounding this, the backup generator's ATS logic board was faulty and failed to detect the dead bus, thus not triggering the auto-start sequence.
+
+Resolution:
+The generator was manually started to restore services. The faulty UPS battery bank and the ATS controller have been flagged for immediate replacement.
+
+Impact:
+Total outage duration was approximately 6 hours. Multiple enterprise customers in the Alexandria North region experienced complete service disruption. 
+
+Lessons Learned:
+1. UPS battery impedance testing must be conducted quarterly rather than annually.
+2. Generator ATS auto-start functionality must be tested under load during monthly maintenance windows.

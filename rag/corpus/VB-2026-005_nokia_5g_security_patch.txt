@@ -1,0 +1,16 @@
+VENDOR BULLETIN: VB-2026-005
+Source: Nokia Networks
+Date: 2026-04-10
+Subject: Security Patch for AirScale 5G Baseband Units - CVE-2026-1847
+
+Vulnerability Details:
+Nokia has issued a critical security advisory regarding CVE-2026-1847, a remote code execution (RCE) vulnerability affecting the management interface of AirScale 5G Baseband units running firmware versions prior to v3.3.0.
+
+An unauthenticated attacker could send a specially crafted packet to the OAM (Operations, Administration, and Maintenance) interface, triggering a buffer overflow and potentially gaining root access to the baseband operating system.
+
+Affected Equipment:
+This applies to all Nokia AirScale units currently deployed in the Nexlink network, most notably the equipment at Node 13 (Suez-5G-Core).
+
+Required Action:
+1. Ensure that the management interfaces (OAM) of all AirScale units are placed behind a firewall and are not exposed to the public internet. Access should be restricted strictly to NOC IP ranges.
+2. Upgrade all affected units to firmware v3.3.0 or higher at the earliest available maintenance window. This firmware release contains the explicit patch for CVE-2026-1847, along with fixes for BGP memory leaks.

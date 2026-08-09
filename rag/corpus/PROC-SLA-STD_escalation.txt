@@ -1,0 +1,14 @@
+STANDARD OPERATING PROCEDURE: PROC-SLA-STD
+Subject: Standard Tier Customer Escalation Protocol
+
+Purpose:
+To outline the handling procedures for Standard-tier customers (e.g., Delta Logistics, residential broadband aggregators) experiencing downtime.
+
+Procedure:
+1. Detection: Alarms are logged into the ticketing system and handled in a First-In, First-Out (FIFO) manner, unless a widespread regional outage is detected.
+2. Response Time: The NOC must acknowledge the ticket within <4 hours during business hours.
+3. Resolution: Service restoration is handled on a "best-effort" basis. There are no strict Time To Repair (TTR) guarantees, though the internal target is next-business-day resolution.
+4. Engineering Dispatch: Field dispatches are scheduled based on engineer availability, typically within 24-48 hours.
+5. Communication: Communication is primarily handled via automated ticket updates.
+
+Standard SLA customers do not receive dedicated account managers or mandatory post-incident reports. However, systemic issues affecting multiple standard users should be escalated internally to prevent broader network degradation.

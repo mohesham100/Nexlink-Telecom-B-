@@ -1,0 +1,15 @@
+STANDARD OPERATING PROCEDURE: PROC-SLA-ENT
+Subject: Enterprise Customer Escalation Protocol
+
+Purpose:
+To outline the handling procedures for Enterprise-tier customers experiencing downtime. Enterprise customers (e.g., TechHub Solutions) require prompt service but have different SLA parameters than VIPs.
+
+Procedure:
+1. Detection: Alarms affecting Enterprise customers will be queued in the NOC dashboard with high priority.
+2. Response Time: The NOC must acknowledge and begin investigating the issue within <1 hour of the alert.
+3. Communication: An automated initial response is sent upon ticket creation. A NOC engineer must provide a personalized update via email or portal within 2 hours.
+4. Engineering Dispatch: If remote troubleshooting fails, a field engineer must be dispatched to the site within <4 hours of the decision to dispatch.
+5. Escalation: If the issue is not resolved within 6 hours, it must be escalated to the Tier 3 Engineering team.
+6. Resolution: Target time to repair (TTR) is 8 hours. Post-incident summaries are available upon customer request, but formal 24-hour PIRs are not strictly mandated unless specifically requested by the account manager.
+
+Adherence to this SLA is critical for customer retention in the competitive enterprise sector.

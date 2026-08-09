@@ -1,0 +1,26 @@
+POST-MORTEM REPORT: PM-2026-001
+Date: 2026-05-14
+Incident: Cairo Metro Line 3 Excavation Fiber Break
+Affected Node: Node 10 (Alex-Fiber-Main)
+
+Timeline (UTC):
+08:14 - Critical alarms triggered for Node 10 backbone link. Loss of signal detected.
+08:15 - NOC escalated incident. Bank of Alexandria VIP circuit down.
+08:30 - Field team dispatched to suspected break location near Cairo Metro Line 3 extension.
+09:00 - Field team arrived. Confirmed massive fiber trunk severed by heavy excavation machinery.
+09:12 - Emergency fusion splicing initiated.
+09:55 - Final splice completed. Optical power restored.
+10:01 - Services fully restored and verified.
+
+Root Cause:
+A contractor for the Cairo Metro Line 3 project was excavating outside their permitted zone and struck the primary subterranean fiber conduit, completely severing the 144-strand trunk that serves Node 10. 
+
+Resolution:
+An emergency splice was performed on the severed cables. The splice restored connectivity, although we will need to schedule a maintenance window to lay a permanent replacement section of the cable to ensure long-term stability.
+
+Impact:
+The total downtime was 107 minutes for general traffic. Specifically, the Bank of Alexandria VIP circuit experienced a 47-minute hard down state before partial traffic rerouting took effect. The SLA for VIP customers dictates <15 minutes response, which was met, but the overall downtime breached the 99.999% uptime guarantee.
+
+Lessons Learned:
+1. Improved physical route diversity is required for Node 10. A secondary path should be established to prevent single-point-of-failure from construction.
+2. Closer coordination with Cairo municipal construction authorities is needed to map our conduits.

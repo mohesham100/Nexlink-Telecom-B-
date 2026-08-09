@@ -1,0 +1,22 @@
+MAINTENANCE VISIT: MV-2026-025
+Date: 2026-07-20
+Location: Node 11 (Cairo-Fiber-East)
+Engineer: Mahmoud Ali
+
+Objective:
+Expand uplink capacity to support the onboarding of several new enterprise customers in the region.
+
+Work Performed:
+1. Arrived on-site at 02:00 UTC during the planned maintenance window.
+2. Installed four (4) new 10G SFP+ transceivers (Cisco compatible) into the aggregation switch.
+3. Ran new OM4 fiber patch cords from the switch ports to the main ODF (Optical Distribution Frame).
+4. Coordinated with the upstream core provider to bring up the new links.
+5. Configured LACP (Link Aggregation Control Protocol) to bundle the new interfaces with the existing links, forming a larger Port-Channel.
+6. Verified light levels on all new optics; Rx power ranges from -4.5 to -5.2 dBm, well within spec.
+7. Monitored traffic distribution across the new aggregated bundle to ensure even load balancing.
+
+Results:
+The uplink capacity for Node 11 has been successfully increased from 50 Gbps to 90 Gbps. This provides significant headroom for the new enterprise clients and mitigates the risk of congestion during peak hours.
+
+Notes:
+The installation was smooth. The port-channel is healthy and passing traffic. No downtime was experienced during the addition of the new links.

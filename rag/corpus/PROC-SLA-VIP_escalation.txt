@@ -1,0 +1,15 @@
+STANDARD OPERATING PROCEDURE: PROC-SLA-VIP
+Subject: VIP Customer Escalation Protocol
+
+Purpose:
+To define the strict timeline and actions required when a VIP-tier customer experiences a service outage. VIP customers include major financial institutions, government entities, and large hospitals.
+
+Procedure:
+1. Detection & Triage: Upon detecting an outage affecting a VIP customer (e.g., Bank of Alexandria, Alexandria Hospital), the alarm must be triaged immediately.
+2. Response Time: The NOC must acknowledge and begin working on the issue within <15 minutes of the alarm.
+3. Internal Escalation: The NOC Shift Manager and the NOC Admin must be notified immediately via PagerDuty and phone call.
+4. Customer Communication: A dedicated customer liaison or account manager must contact the VIP customer within 30 minutes of the outage to acknowledge the issue and provide an initial status update. Update intervals should be every 30 minutes thereafter unless agreed otherwise.
+5. Engineering Dispatch: If physical intervention is required, field engineers must be dispatched immediately, bypassing standard queueing.
+6. Post-Incident Report (PIR): A detailed post-mortem report must be generated and delivered to the VIP customer within 24 hours of service restoration. The PIR must include Root Cause Analysis (RCA) and preventative measures.
+
+Failure to adhere to this SLA results in significant financial penalties for Nexlink Telecom. All NOC personnel must prioritize VIP alarms above all other traffic.

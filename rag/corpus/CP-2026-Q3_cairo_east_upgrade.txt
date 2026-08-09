@@ -1,0 +1,13 @@
+CAPACITY PLANNING: CP-2026-Q3
+Subject: Cairo East Hub Upgrade
+Target Completion: November 2026
+
+Overview:
+Node 11 (Cairo-Fiber-East) is currently healthy but is forecasted to see a 40% increase in traffic due to the onboarding of a new technology park in the district. To maintain our SLA commitments, proactive upgrades are required.
+
+Expansion Requirements:
+1. Redundancy: Currently, Node 11 relies on a single linear fiber path for its primary uplink, making it vulnerable to construction cuts (similar to the Node 10 incident). A redundant fiber ring must be constructed, connecting Node 11 back to the core via a physically diverse route.
+2. Aggregation Upgrades: While 10G links were recently added (MV-2026-025), the core aggregation switch backplane is nearing its limit. We need to upgrade the line cards to support native 100G interfaces.
+
+Budget & Timeline:
+The civil works required to construct the redundant fiber ring will be the most time-consuming aspect. The estimated cost for fiber trenching, permits, and new hardware is 2.3M EGP. Permits should be filed by August, with construction targeting October, and final turn-up in November 2026.

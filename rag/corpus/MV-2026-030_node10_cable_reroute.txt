@@ -1,0 +1,24 @@
+MAINTENANCE VISIT: MV-2026-030
+Date: 2026-08-01
+Location: Node 10 (Alex-Fiber-Main) / Cairo Ring Road
+Engineer: Tarek Mahmoud
+
+Objective:
+Reroute the primary fiber trunk for Node 10 away from the Cairo Metro Line 3 construction zone to prevent further accidental fiber cuts.
+
+Work Performed:
+1. Coordinated a major maintenance window starting at 00:00 UTC.
+2. A new 144-strand fiber cable had been pre-laid via the Ring Road conduit over the past two weeks.
+3. Splicing teams were positioned at both ends of the new route (at Node 10 and the core handoff point).
+4. Traffic was temporarily shifted to the secondary, lower-capacity path.
+5. The old, vulnerable path traversing the metro construction zone was severed and decommissioned.
+6. Fusion splicing of the new Ring Road route commenced.
+7. OTDR testing confirmed all 144 splices were solid, with average loss at 0.12 dB.
+8. Reconfigured routing to prefer the new, secure path.
+9. Traffic was shifted back to the primary link.
+
+Results:
+The primary fiber trunk for Node 10 has been successfully rerouted. The new path via the Ring Road conduit is physically diverse from the Metro construction and is significantly less prone to accidental excavation damage.
+
+Notes:
+The total disruption during the traffic shift was minimal (less than 2 minutes). Node 10 is now much more resilient.

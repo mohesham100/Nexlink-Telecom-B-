@@ -1,0 +1,17 @@
+VENDOR BULLETIN: VB-2026-007
+Source: Cisco Systems
+Date: 2026-01-20
+Subject: End-of-Life (EOL) Notice for ASR 9000 Series Routers
+
+Details:
+Cisco Systems announces the end-of-sale and end-of-life dates for the ASR 9000 series aggregation routers. This affects several edge and aggregation devices deployed within the Nexlink network, primarily in the Alexandria datacenter.
+
+Key Dates:
+- End-of-Sale (EOS): June 30, 2026. No new units can be ordered after this date.
+- Last Day of Support (LDOS): December 31, 2027. Cisco TAC will no longer provide support, and no further software updates or security patches will be released.
+
+Impact on Nexlink:
+The legacy ASR 9000 units in the Alexandria facility must be phased out before the LDOS date to maintain vendor support and security compliance. 
+
+Action Plan:
+Engineering must evaluate replacement platforms (e.g., Cisco NCS 5500 series or Juniper PTX series). A migration project should be initiated, with a hard deadline to complete hardware swapping by Q4 2026 to ensure ample time for troubleshooting and integration before the support cutoff in 2027.

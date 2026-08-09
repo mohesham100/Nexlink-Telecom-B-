@@ -1,0 +1,16 @@
+STANDARD OPERATING PROCEDURE: PROC-INCIDENT-RESPONSE
+Subject: Incident Response Protocol
+
+Purpose:
+To standardize the response to unscheduled network events and outages.
+
+Procedure:
+1. Triage & Classification: Upon receiving an alarm, the NOC must classify the severity:
+   - P1 (Critical): Total node outage, VIP customer down, or major security breach.
+   - P2 (High): Enterprise customer down, severe degradation, redundancy lost.
+   - P3 (Medium): Single standard customer down, minor degradation.
+   - P4 (Low): Informational alarms, cosmetic issues.
+2. Assign Owner: Every incident must have a single designated Incident Commander (usually the senior NOC engineer on shift).
+3. Communication: Establish a bridge call or dedicated Slack channel for P1/P2 incidents. Regular updates must be pushed to stakeholders.
+4. Resolution: Focus entirely on service restoration. Root cause analysis can follow later; mitigating the immediate impact is the priority.
+5. Post-Mortem: A PIR must be conducted for all P1 and P2 incidents to identify the root cause and implement preventative measures.
