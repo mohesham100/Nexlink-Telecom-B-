@@ -261,6 +261,104 @@ def search_knowledge_base(query: str, entity_id: str = None, top_k: int = 3) -> 
         args["entity_id"] = entity_id
     return search_knowledge_base_handler(args, session_role=active_session["role"])
 
+
+# ============================================================
+# Planning Lab: additional tools for multi-step planning
+# ============================================================
+
+@mcp.tool()
+def list_all_nodes() -> str:
+    """List all network nodes with their status, type, load, and capacity."""
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT id, name, type, status, current_load_gbps, max_capacity_gbps, location "
+        "FROM network_nodes ORDER BY id"
+    )
+    rows = cur.fetchall()
+    conn.close()
+
+    if not rows:
+        return "No network nodes found."
+
+    lines = []
+    for r in rows:
+        pct = round((r[4] / r[5]) * 100, 1) if r[5] > 0 else 0.0
+        lines.append(
+            f"Node #{r[0]} ({r[1]}): type={r[2]}, status={r[3]}, "
+            f"load={r[4]}/{r[5]} Gbps ({pct}%), location={r[6]}"
+        )
+    return "\n".join(lines)
+
+
+@mcp.tool()
+def list_all_customers() -> str:
+    """List all customers with their SLA tier, assigned node, and service status."""
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT c.id, c.name, c.industry, c.sla_tier,
+               s.node_id, s.allocated_bandwidth_gbps, s.status,
+               n.name, n.status
+        FROM customers c
+        LEFT JOIN services s ON c.id = s.customer_id
+        LEFT JOIN network_nodes n ON s.node_id = n.id
+        ORDER BY c.id
+    """)
+    rows = cur.fetchall()
+    conn.close()
+
+    if not rows:
+        return "No customers found."
+
+    lines = []
+    for r in rows:
+        lines.append(
+            f"Customer #{r[0]} ({r[1]}): industry={r[2]}, SLA={r[3]}, "
+            f"node=#{r[4]} ({r[7]}, status={r[8]}), "
+            f"bandwidth={r[5]} Gbps, service_status={r[6]}"
+        )
+    return "\n".join(lines)
+
+
+@mcp.tool()
+def get_node_customers(node_id: int) -> str:
+    """Get all customers assigned to a specific network node."""
+    if node_id <= 0:
+        return "Validation Error: node_id must be positive."
+
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT c.id, c.name, c.sla_tier, c.industry,
+               s.allocated_bandwidth_gbps, s.status
+        FROM customers c
+        JOIN services s ON c.id = s.customer_id
+        WHERE s.node_id = ?
+        ORDER BY c.sla_tier, c.id
+    """, (node_id,))
+    rows = cur.fetchall()
+
+    cur.execute("SELECT name, status FROM network_nodes WHERE id = ?", (node_id,))
+    node_row = cur.fetchone()
+    conn.close()
+
+    if not node_row:
+        return f"Node {node_id} not found."
+
+    header = f"Node #{node_id} ({node_row[0]}, status={node_row[1]}) — {len(rows)} customer(s):"
+    if not rows:
+        return header + "\n  No customers assigned to this node."
+
+    lines = [header]
+    for r in rows:
+        lines.append(
+            f"  Customer #{r[0]} ({r[1]}): SLA={r[2]}, industry={r[3]}, "
+            f"bandwidth={r[4]} Gbps, service={r[5]}"
+        )
+    return "\n".join(lines)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--transport", choices=["stdio", "http"], default="stdio")
