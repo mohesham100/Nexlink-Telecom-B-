@@ -3,16 +3,21 @@ import os
 import sqlite3
 import argparse
 from typing import Dict, Any
-from mcp.server.fastmcp import FastMCP, Context
+from dataclasses import dataclass
+from fastmcp import FastMCP, Context
 from mcp.types import PromptMessage, TextContent
+from langchain_ollama import ChatOllama
 
 import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
-from mcp_server.rag.rag_tool import search_knowledge_base_handler
+from mcp_server.rag.rag_tool import search_knowledge_base_handler, knowledge_store
 
 mcp = FastMCP("NexlinkTelecomNOC")
 DB_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'db', 'nexlink.db')
 POLICIES_DIR = os.path.join(os.path.dirname(__file__), 'policies')
+
+# Real LLM client for query decomposition
+decompose_llm = ChatOllama(model="qwen-accurate:9b", temperature=0)
 
 active_session: Dict[str, Any] = {
     "authenticated": False,
@@ -180,6 +185,74 @@ async def analyze_incident_root_cause(node_id: int, ctx: Context) -> str:
 
     return f"Root Cause Analysis for Node #{node_id}: {analysis}"
 
+DECOMPOSE_PROMPT = """\
+Break the following question into 2-4 simpler sub-questions that, together,
+fully answer it. If the question is already simple, just return it as-is
+as a single sub-question.
+
+Question: {query}
+
+Return ONLY a numbered list, one sub-question per line. Example:
+1. ...
+2. ...
+"""
+
+
+def decompose_query(query: str) -> list[str]:
+    """Turn one (possibly compound) query into a list of sub-questions."""
+    raw = str(decompose_llm.invoke(DECOMPOSE_PROMPT.format(query=query)).content)
+
+    sub_questions = []
+    for line in raw.strip().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        # strip a leading "1.", "2)", "- " etc.
+        for sep in [". ", ") ", "- "]:
+            if sep in line[:4]:
+                line = line.split(sep, 1)[1]
+                break
+        sub_questions.append(line.strip())
+
+    return sub_questions or [query]  # fallback: treat as one question
+
+
+# Tagged result so the model knows which sub-question each chunk answers
+
+
+@dataclass
+class TaggedChunk:
+    sub_question: str
+    chunk: str
+    score: float
+
+
+@mcp.tool()
+def decompose_and_search(query: str, top_k: int = 3) -> str:
+    """
+    Break a compound question into sub-questions, search the knowledge base
+    once per sub-question, and return combined tagged results.
+    Sits in front of search_knowledge_base — does not replace it.
+    """
+    sub_questions = decompose_query(query)
+
+    results: list[TaggedChunk] = []
+    for sub_q in sub_questions:
+        # Query knowledge store per sub-question with RBAC role filter
+        hits = knowledge_store.query(query_text=sub_q, top_k=top_k)
+        for doc in hits:
+            if doc["metadata"]["role_required"] in ("any", active_session["role"]):
+                results.append(TaggedChunk(sub_question=sub_q, chunk=doc["payload"], score=1.0))
+
+    if not results:
+        return "No relevant records found for any sub-question."
+
+    output_lines = []
+    for r in results:
+        output_lines.append(f"[Sub-Q: {r.sub_question}] -> {r.chunk} (score={r.score})")
+    return "\n".join(output_lines)
+
+
 @mcp.tool()
 def search_knowledge_base(query: str, entity_id: str = None, top_k: int = 3) -> str:
     """Search unstructured NOC incident post-mortems, runbooks, and maintenance notes."""
@@ -187,6 +260,104 @@ def search_knowledge_base(query: str, entity_id: str = None, top_k: int = 3) -> 
     if entity_id:
         args["entity_id"] = entity_id
     return search_knowledge_base_handler(args, session_role=active_session["role"])
+
+
+# ============================================================
+# Planning Lab: additional tools for multi-step planning
+# ============================================================
+
+@mcp.tool()
+def list_all_nodes() -> str:
+    """List all network nodes with their status, type, load, and capacity."""
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute(
+        "SELECT id, name, type, status, current_load_gbps, max_capacity_gbps, location "
+        "FROM network_nodes ORDER BY id"
+    )
+    rows = cur.fetchall()
+    conn.close()
+
+    if not rows:
+        return "No network nodes found."
+
+    lines = []
+    for r in rows:
+        pct = round((r[4] / r[5]) * 100, 1) if r[5] > 0 else 0.0
+        lines.append(
+            f"Node #{r[0]} ({r[1]}): type={r[2]}, status={r[3]}, "
+            f"load={r[4]}/{r[5]} Gbps ({pct}%), location={r[6]}"
+        )
+    return "\n".join(lines)
+
+
+@mcp.tool()
+def list_all_customers() -> str:
+    """List all customers with their SLA tier, assigned node, and service status."""
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT c.id, c.name, c.industry, c.sla_tier,
+               s.node_id, s.allocated_bandwidth_gbps, s.status,
+               n.name, n.status
+        FROM customers c
+        LEFT JOIN services s ON c.id = s.customer_id
+        LEFT JOIN network_nodes n ON s.node_id = n.id
+        ORDER BY c.id
+    """)
+    rows = cur.fetchall()
+    conn.close()
+
+    if not rows:
+        return "No customers found."
+
+    lines = []
+    for r in rows:
+        lines.append(
+            f"Customer #{r[0]} ({r[1]}): industry={r[2]}, SLA={r[3]}, "
+            f"node=#{r[4]} ({r[7]}, status={r[8]}), "
+            f"bandwidth={r[5]} Gbps, service_status={r[6]}"
+        )
+    return "\n".join(lines)
+
+
+@mcp.tool()
+def get_node_customers(node_id: int) -> str:
+    """Get all customers assigned to a specific network node."""
+    if node_id <= 0:
+        return "Validation Error: node_id must be positive."
+
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+    cur.execute("""
+        SELECT c.id, c.name, c.sla_tier, c.industry,
+               s.allocated_bandwidth_gbps, s.status
+        FROM customers c
+        JOIN services s ON c.id = s.customer_id
+        WHERE s.node_id = ?
+        ORDER BY c.sla_tier, c.id
+    """, (node_id,))
+    rows = cur.fetchall()
+
+    cur.execute("SELECT name, status FROM network_nodes WHERE id = ?", (node_id,))
+    node_row = cur.fetchone()
+    conn.close()
+
+    if not node_row:
+        return f"Node {node_id} not found."
+
+    header = f"Node #{node_id} ({node_row[0]}, status={node_row[1]}) — {len(rows)} customer(s):"
+    if not rows:
+        return header + "\n  No customers assigned to this node."
+
+    lines = [header]
+    for r in rows:
+        lines.append(
+            f"  Customer #{r[0]} ({r[1]}): SLA={r[2]}, industry={r[3]}, "
+            f"bandwidth={r[4]} Gbps, service={r[5]}"
+        )
+    return "\n".join(lines)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

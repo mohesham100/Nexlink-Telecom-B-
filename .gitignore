@@ -24,3 +24,10 @@ venv.bak/
 .vscode/
 .idea/
 *.swp
+
+# Memory & RAG Lab runtime data
+rag/chroma_db/
+db/memory.db
+memory/routing_log.jsonl
+context_eval/results_table.md
+retrieval_eval/results_table.md
